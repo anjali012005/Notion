@@ -2,11 +2,12 @@
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react"
 import { useUser } from "@clerk/nextjs"
+import './Header.css'
 
 const Header = () => {
   const {user} = useUser()
   return (
-    <div className="flex items-center justify-between p-5">
+    <div className="user">
       {user && (
         <h1>
           {user?.firstName}

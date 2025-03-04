@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
+
 
 
 
@@ -19,8 +21,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-          <Header/>
-          {children}
+          <Header />
+
+          <div className="layout-div ">
+            <Sidebar/>
+            <div className="children flex-1 p-4 bg-gray-100 overflow-y-auto">{children}</div>
+          </div>
+
         </body>
       </html>
     </ClerkProvider>
