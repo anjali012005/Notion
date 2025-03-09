@@ -16,6 +16,7 @@ import { MenuIcon } from 'lucide-react'
 import { useUser } from '@clerk/nextjs';
 import { collectionGroup, DocumentData, query, where } from 'firebase/firestore';
 import { db } from '@/firebase';
+import SidebarOption from './SidebarOption';
 // import { EmailAddress } from '@clerk/nextjs/server';
 
 
@@ -93,8 +94,8 @@ const Sidebar = () => {
                             My Documents
                         </h2>
                         {groupedData.owner.map((doc) => (
-                            <p>{doc.roomId}</p>
-                            // <SidebarOption key={doc.id} id={doc.id} href={`/doc/${doc.id}`} />
+                            // <p>{doc.roomId}</p>
+                            <SidebarOption key={doc.id} id={doc.id} href={`/doc/${doc.id}`} />
                         ))}
                     </>
                 )}
@@ -102,6 +103,16 @@ const Sidebar = () => {
             {/* List */}
 
             {/* Shared with me */}
+            {groupedData.editor.length > 0 && (
+                <>
+                    <h2 className='text-gray-500 font-semibold text-sm'>
+                        Shared with me
+                    </h2>
+                    {groupedData.editor.map((doc) => (
+                        <SidebarOption key={doc.id} id={doc.id} href={`/doc/${doc.id}`} />
+                    ))}
+                </>
+            )}
             {/* List... */}
         </>
     )
