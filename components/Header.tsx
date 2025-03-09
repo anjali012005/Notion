@@ -38,6 +38,7 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { useUser } from "@clerk/nextjs";
 import "./Header.css";
+import Breadcrumbs from "./Breadcrumbs";
 
 const Header = () => {
   const { user, isSignedIn, isLoaded } = useUser();
@@ -53,6 +54,10 @@ const Header = () => {
   return (
     <div className="user">
       {isSignedIn ? <h1>{user?.firstName || "User"}'s Space</h1> : <h1>Welcome!</h1>}
+
+
+      {/* Breadcrumbs */}
+      <Breadcrumbs/>
 
       <div>
         <SignedOut>
