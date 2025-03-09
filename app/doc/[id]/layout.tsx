@@ -2,7 +2,7 @@ import RoomProvider from '@/components/RoomProvider';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import React from 'react'
 
-const DocLayout =()=> async({children, params: {id}} : {children:React.ReactNode, params: {id:string}}) =>{
+const DocLayout = async({children, params: {id}} : {children:React.ReactNode, params: {id:string}}) =>{
     const user = await currentUser(); // Get user details properly
 
     console.log("User Data:", user);
