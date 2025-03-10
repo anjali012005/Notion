@@ -1,6 +1,7 @@
 "use server";
 
 import { adminDb } from "@/firebase-admin";
+import liveblocks from "@/lib/liveblocks";
 import { auth } from "@clerk/nextjs/server";
 import { currentUser } from "@clerk/nextjs/server";
 
@@ -44,4 +45,48 @@ export async function createNewDocument() {
 
     return { docId: docRef.id };
 
+}
+
+export async function deleteDocument(roomId: string) {
+    const user = await currentUser(); // Get user details properly
+
+    const { sessionClaims, userId } = await auth();
+
+    if (!userId) {
+        throw new Error("Unauthorized: No user found");
+    }
+
+    const userEmail = sessionClaims?.email;
+
+    if (!userEmail) {
+        throw new Error("Error: User email is undefined");
+    }
+
+    console.log("deleteDocument", roomId);
+
+    try {
+        //delete the document reference itself
+        await adminDb.collection("document").doc(roomId).delete();
+
+        const query = await adminDb
+            .collectionGroup("rooms")
+            .where("roomId", "==", roomId)
+            .get();
+
+        const batch = adminDb.batch();
+
+        //delete the room references in the user's collection for every user in the room
+        query.docs.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+
+        await liveblocks.deleteRoom(roomId);
+
+        return {success: true};
+    } catch (error) {
+        console.error(error);
+        return { success: false };
+    }
 }
