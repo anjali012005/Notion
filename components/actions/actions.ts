@@ -125,3 +125,33 @@ export async function inviteUserToDocument(roomId: string, email: string) {
         return { success: false };
     }
 }
+
+export async function removeUserFromDocument(roomId: string, email: string) {
+    const user = await currentUser(); // Get user details properly
+
+    const { sessionClaims, userId } = await auth();
+
+    if (!userId) {
+        throw new Error("Unauthorized: No user found");
+    }
+
+    const userEmail = sessionClaims?.email;
+
+    if (!userEmail) {
+        throw new Error("Error: User email is undefined");
+    }
+
+    try {
+        await adminDb
+            .collection("users")
+            .doc(email)
+            .collection("rooms")
+            .doc(roomId)
+            .delete();
+
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false };
+    }
+}
