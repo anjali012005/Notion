@@ -11,6 +11,7 @@ import useOwner from '@/lib/useOwner';
 import DeleteDocument from './DeleteDocument';
 import InviteUser from './InviteUser';
 import ManageUsers from './ManageUsers';
+import Avatars from './Avatars';
 
 
 
@@ -67,9 +68,8 @@ const Document = ({ id }: { id: string }) => {
 
             <div className='flex max-w-6xl mx-auto justify-between items-center mb-5'>
                 <ManageUsers/>
-                {/* ManageUsers */}
 
-                {/* Avatars */}
+                <Avatars />
             </div>
 
             <hr className='pb-10' />
