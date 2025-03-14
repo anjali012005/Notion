@@ -15,6 +15,7 @@ import "@blocknote/shadcn/style.css";
 import { useSelf } from '@liveblocks/react/suspense';
 import stringToColor from '@/lib/stringToColor';
 import TranslateDocument from './TranslateDocument';
+import ChatToDocument from './ChatToDocument';
 
 type EditorProps = {
     doc: Y.Doc;
@@ -83,7 +84,7 @@ const Editor = () => {
         <div className='max-w-6xl mx-auto'>
             <div className='flex items-center gap-2 justify-end mb-10'>
                 <TranslateDocument doc={doc}/>
-                {/* ChatToDocument AI */}
+                <ChatToDocument doc={doc} />
 
 
                 {/* Dark Mode */}
