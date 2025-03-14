@@ -1,30 +1,71 @@
+// import RoomProvider from '@/components/RoomProvider';
+// import { auth, currentUser } from '@clerk/nextjs/server';
+// import React from 'react'
+
+// const DocLayout = async({children, params: {id}} : {children:React.ReactNode, params: {id:string}}) =>{
+//     const user = await currentUser(); // Get user details properly
+
+//     console.log("User Data:", user);
+//     const { sessionClaims, userId } = await auth();
+
+//     if (!userId) {
+//         throw new Error("Unauthorized: No user found");
+//     }
+
+//     const userEmail = sessionClaims?.email;
+
+//     if (!userEmail) {
+//         throw new Error("Error: User email is undefined");
+//     }
+
+//     console.log("Session Email:", sessionClaims?.email);
+//     return (
+//         <RoomProvider roomId={id}>
+//             {children}
+//         </RoomProvider>
+//     )
+// }
+
+// export default DocLayout
+
+
+"use server"
 import RoomProvider from '@/components/RoomProvider';
 import { auth, currentUser } from '@clerk/nextjs/server';
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 
-const DocLayout = async({children, params: {id}} : {children:React.ReactNode, params: {id:string}}) =>{
-    const user = await currentUser(); // Get user details properly
+const UserAuthWrapper = ({ children, id }: { children: React.ReactNode; id: string }) => {
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
-    console.log("User Data:", user);
-    const { sessionClaims, userId } = await auth();
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const user = await currentUser();
+                console.log("User Data:", user);
 
-    if (!userId) {
-        throw new Error("Unauthorized: No user found");
-    }
+                const { sessionClaims, userId } = await auth();
 
-    const userEmail = sessionClaims?.email;
+                if (!userId) throw new Error("Unauthorized: No user found");
 
-    if (!userEmail) {
-        throw new Error("Error: User email is undefined");
-    }
+                if (!sessionClaims?.email) throw new Error("Error: User email is undefined");
 
-    console.log("Session Email:", sessionClaims?.email);
-    return (
-        <RoomProvider roomId={id}>
-            {children}
-        </RoomProvider>
-    )
-}
+                console.log("Session Email:", sessionClaims?.email);
+                setIsAuthorized(true);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-export default DocLayout
+        checkAuth();
+    }, []);
 
+    if (!isAuthorized) return <div>Loading...</div>;
+
+    return <RoomProvider roomId={id}>{children}</RoomProvider>;
+};
+
+const DocLayout = ({ children, params: { id } }: { children: React.ReactNode; params: { id: string } }) => {
+    return <UserAuthWrapper id={id}>{children}</UserAuthWrapper>;
+};
+
+export default DocLayout;
