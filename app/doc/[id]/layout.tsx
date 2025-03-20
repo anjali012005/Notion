@@ -32,14 +32,14 @@
 
 import RoomProvider from '@/components/RoomProvider';
 import { auth } from '@clerk/nextjs/server';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface DocLayoutProps {
-    children: React.ReactNode;
+    children: ReactNode;
     params: { id: string };
 }
 
-const DocLayout = async ({ children, params: { id } }: DocLayoutProps) => {
+const DocLayout = async ({ children, params }: DocLayoutProps) => {
     const { sessionClaims, userId } = await auth();
 
     if (!userId) {
@@ -56,11 +56,10 @@ const DocLayout = async ({ children, params: { id } }: DocLayoutProps) => {
     console.log("Session Email:", userEmail);
 
     return (
-        <RoomProvider roomId={id}>
+        <RoomProvider roomId={params.id}>
             {children}
         </RoomProvider>
     );
 };
 
 export default DocLayout;
-
