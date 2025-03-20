@@ -29,20 +29,23 @@
 
 // export default DocLayout
 
-
 import RoomProvider from '@/components/RoomProvider';
 import { auth } from '@clerk/nextjs/server';
 import { ReactNode } from 'react';
 
-// Define the correct type to avoid 'Promise' issue
 interface DocLayoutProps {
     children: ReactNode;
-    params: { id: string }; // Ensure 'params' is correctly typed
+    params: { id: string };
 }
 
-// Remove `async` from function declaration
-const DocLayout = ({ children, params }: DocLayoutProps) => {
-    // Auth needs to be handled in a useEffect or server action (Next.js restriction)
+// Make the function async (since we're using auth) and ensure it returns JSX
+const DocLayout = async ({ children, params }: DocLayoutProps) => {
+    const { sessionClaims, userId } = await auth();
+
+    if (!userId) {
+        throw new Error("Unauthorized: No user found");
+    }
+
     return (
         <RoomProvider roomId={params.id}>
             {children}
