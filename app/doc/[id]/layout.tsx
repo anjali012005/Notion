@@ -33,13 +33,13 @@ import RoomProvider from '@/components/RoomProvider';
 import { auth } from '@clerk/nextjs/server';
 import { ReactNode } from 'react';
 
-// Explicitly define the correct type for Next.js dynamic route params
-interface PageProps {
+// Define the correct type for Next.js dynamic route params
+interface DocLayoutProps {
     children: ReactNode;
-    params: { id: string }; // Ensure 'params' is not inferred as a Promise
+    params: { id: string }; // Ensure 'params' is explicitly typed
 }
 
-const DocLayout = async ({ children, params }: PageProps) => {
+const DocLayout = async ({ children, params }: DocLayoutProps) => {
     const { sessionClaims, userId } = await auth();
 
     if (!userId) {
