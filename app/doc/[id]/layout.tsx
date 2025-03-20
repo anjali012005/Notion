@@ -29,10 +29,9 @@
 
 // export default DocLayout
 
-
 import RoomProvider from '@/components/RoomProvider';
 import { auth } from '@clerk/nextjs/server';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface DocLayoutProps {
     children: ReactNode;
