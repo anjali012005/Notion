@@ -29,24 +29,32 @@
 
 // export default DocLayout
 
-import RoomProvider from '@/components/RoomProvider';
-import { ReactNode } from 'react';
+import RoomProvider from "@/components/RoomProvider";
+import { auth } from "@clerk/nextjs/server";
+import { ReactNode } from "react";
 
-// ✅ Correctly define `params` inside a separate type
+// Props ka type sahi define karo
 interface DocLayoutProps {
-    children: ReactNode;
-    params: Promise<{ id: string }>; // 👈 Fix the Promise issue
+  children: ReactNode;
+  params: { id: string };
 }
 
-// ✅ Make function `async` to handle `params` properly
 const DocLayout = async ({ children, params }: DocLayoutProps) => {
-    const resolvedParams = await params; // 👈 Await the params correctly
+  const { sessionClaims, userId } = await auth();
 
-    return (
-        <RoomProvider roomId={resolvedParams.id}>
-            {children}
-        </RoomProvider>
-    );
+  if (!userId) {
+    throw new Error("Unauthorized: No user found");
+  }
+
+  const userEmail = sessionClaims?.email;
+  if (!userEmail) {
+    throw new Error("Error: User email is undefined");
+  }
+
+  console.log("Session Email:", userEmail);
+
+  return <RoomProvider roomId={params.id}>{children}</RoomProvider>;
 };
 
 export default DocLayout;
+
