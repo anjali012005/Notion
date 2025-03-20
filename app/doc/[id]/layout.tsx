@@ -32,15 +32,18 @@
 import RoomProvider from '@/components/RoomProvider';
 import { ReactNode } from 'react';
 
+// ✅ Correctly define `params` inside a separate type
 interface DocLayoutProps {
     children: ReactNode;
-    params: { id: string }; // Ensure `params` is correctly typed
+    params: Promise<{ id: string }>; // 👈 Fix the Promise issue
 }
 
-// ✅ Do NOT make this function async
-const DocLayout = ({ children, params }: DocLayoutProps) => {
+// ✅ Make function `async` to handle `params` properly
+const DocLayout = async ({ children, params }: DocLayoutProps) => {
+    const resolvedParams = await params; // 👈 Await the params correctly
+
     return (
-        <RoomProvider roomId={params.id}>
+        <RoomProvider roomId={resolvedParams.id}>
             {children}
         </RoomProvider>
     );
