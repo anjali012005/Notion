@@ -33,12 +33,13 @@ import RoomProvider from '@/components/RoomProvider';
 import { auth } from '@clerk/nextjs/server';
 import { ReactNode } from 'react';
 
-interface DocLayoutProps {
+// Use Next.js-defined type for layout props
+interface LayoutProps {
     children: ReactNode;
     params: { id: string };
 }
 
-const DocLayout = async ({ children, params }: DocLayoutProps) => {
+const DocLayout = async ({ children, params }: LayoutProps) => {
     const { sessionClaims, userId } = await auth();
 
     if (!userId) {
