@@ -33,11 +33,11 @@ import RoomProvider from '@/components/RoomProvider';
 import { auth } from '@clerk/nextjs/server';
 import { ReactNode } from 'react';
 
-// Define the correct type for Next.js dynamic route params
-interface DocLayoutProps {
+// Define correct type without 'Promise' issues
+type DocLayoutProps = {
     children: ReactNode;
-    params: { id: string }; // Ensure 'params' is explicitly typed
-}
+    params: { id: string }; // Ensure 'params' is an object, not a Promise
+};
 
 const DocLayout = async ({ children, params }: DocLayoutProps) => {
     const { sessionClaims, userId } = await auth();
