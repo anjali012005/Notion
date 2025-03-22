@@ -9,14 +9,14 @@ import {
 import { getFirestore } from "firebase-admin/firestore";
 
 // import serviceKey  from "@/service_key.json";
-const serviceKey = require("./service_key.json"); // JSON import issue fix
+// import serviceKey from "./service_key.json"; // JSON import issue fix
 
 
 let app : App;
 
 if(getApps().length === 0){
     app = initializeApp({
-        credential: cert(serviceKey),
+        credential: cert({projectId: process.env.NEXT_PUBLIC_PROJECT_ID, privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY, clientEmail: process.env.NEXT_PUBLIC_CLIENT_EMAIL}),
     });
 }else{
     app = getApp();
