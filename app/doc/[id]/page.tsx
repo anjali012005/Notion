@@ -35,4 +35,3 @@ const DocumentPage = ({ params }: DocumentPageProps) => {
 };
 
 export default DocumentPage;
-
